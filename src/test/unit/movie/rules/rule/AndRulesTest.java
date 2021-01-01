@@ -6,12 +6,13 @@ import cinema.movie.rules.rule.AndRules;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.*;
 
 public class AndRulesTest {
+    public static List<RequestedSeat> requestedSeats;
+
     static class RuleInterfaceMockTrue implements Rule {
         @Override
         public boolean canMakeReservation(List<RequestedSeat> requestedSeats) {
@@ -25,12 +26,15 @@ public class AndRulesTest {
         }
     }
 
-    @Test
-    void canMakeReservationWhenTrueAndFalseReturned() {
-        /* @TODO, pytania: 1. @Before (przypisanie zmiennej) 2. Mockito */
+    @BeforeClass
+    public static void setUp() {
         RequestedSeat seat = new RequestedSeat(1, 1, 1);
         RequestedSeat secondSeat = new RequestedSeat(1, 1, 2);
-        List<RequestedSeat> requestedSeats = List.of(seat, secondSeat);
+        requestedSeats = List.of(seat, secondSeat);
+    }
+
+    @Test
+    public void canMakeReservationWhenTrueAndFalseReturned() {
         RuleInterfaceMockTrue ruleTrue = new RuleInterfaceMockTrue();
         RuleInterfaceMockFalse ruleFalse = new RuleInterfaceMockFalse();
         AndRules andRules = new AndRules(ruleTrue, ruleFalse);
@@ -38,20 +42,14 @@ public class AndRulesTest {
     }
 
     @Test
-    void canMakeReservationWhenTrueReturned() {
-        RequestedSeat seat = new RequestedSeat(1, 1, 1);
-        RequestedSeat secondSeat = new RequestedSeat(1, 1, 2);
-        List<RequestedSeat> requestedSeats = List.of(seat, secondSeat);
+    public void canMakeReservationWhenTrueReturned() {
         RuleInterfaceMockTrue ruleTrue = new RuleInterfaceMockTrue();
         AndRules andRules = new AndRules(ruleTrue);
         assertTrue(andRules.canMakeReservation(requestedSeats));
     }
 
     @Test
-    void canMakeReservationWhenFalseReturned() {
-        RequestedSeat seat = new RequestedSeat(1, 1, 1);
-        RequestedSeat secondSeat = new RequestedSeat(1, 1, 2);
-        List<RequestedSeat> requestedSeats = List.of(seat, secondSeat);
+    public void canMakeReservationWhenFalseReturned() {
         RuleInterfaceMockFalse ruleFalse = new RuleInterfaceMockFalse();
         AndRules andRules = new AndRules(ruleFalse);
         assertFalse(andRules.canMakeReservation(requestedSeats));
