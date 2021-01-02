@@ -17,39 +17,25 @@ public class SpaceBetweenRequestedSeats implements Rule {
 
     @Override
     public boolean canMakeReservation(List<RequestedSeat> requestedSeats) {
-        Map<Integer,Map<Integer,List<Integer>>> groupedSeats = groupSeats(requestedSeats);
-
-        return checkGroupedSeats(groupedSeats);
+        return checkAll(requestedSeats);
     }
 
-    private Map<Integer,Map<Integer,List<Integer>>> groupSeats(List<RequestedSeat> requestedSeats){
-        Map<Integer,Map<Integer,List<Integer>>> allRows = new HashMap();
+    private boolean checkAll(List<RequestedSeat> requestedSeats)
+    {
+        Map<Integer,List<RequestedSeat>> sectors = new HashMap();
 
-        /*
-         * @TODO REFACTOR!
-         */
         for (RequestedSeat requestedSeat : requestedSeats) {
-            if (!allRows.containsKey(requestedSeat.getSector())) {
-                Map<Integer,List<Integer>> row = new HashMap();
-                List<Integer> seats = new ArrayList();
-                seats.add(requestedSeat.getSeatInRow());
-                row.put(requestedSeat.getRow(), seats);
-                allRows.put(requestedSeat.getSector(), row);
-            } else if (!allRows.get(requestedSeat.getSector()).containsKey(requestedSeat.getRow())) {
-                List<Integer> seats = new ArrayList();
-                seats.add(requestedSeat.getSeatInRow());
-                allRows.get(requestedSeat.getSector()).put(requestedSeat.getRow(), seats);
+            if (!sectors.containsKey(requestedSeat.getSector())) {
+                List<RequestedSeat> seats = new ArrayList();
+                seats.add(requestedSeat);
+                sectors.put(requestedSeat.getSector(),seats);
             } else {
-                allRows.get(requestedSeat.getSector()).get(requestedSeat.getRow()).add(requestedSeat.getSeatInRow());
+                sectors.get(requestedSeat.getSector()).add(requestedSeat);
             }
         }
 
-        return allRows;
-    }
-
-    private boolean checkGroupedSeats(Map<Integer,Map<Integer,List<Integer>>> groupedSeats) {
-        for(Map.Entry<Integer,Map<Integer,List<Integer>>> sector : groupedSeats.entrySet()) {
-            if (!checkRowsInSector(sector)) {
+        for (Map.Entry<Integer, List<RequestedSeat>> requestedSeatsInSector : sectors.entrySet()) {
+            if (!checkSector(requestedSeatsInSector.getValue())) {
                 return false;
             }
         }
@@ -57,9 +43,22 @@ public class SpaceBetweenRequestedSeats implements Rule {
         return true;
     }
 
-    private boolean checkRowsInSector(Map.Entry<Integer,Map<Integer,List<Integer>>> rows) {
-        for(Map.Entry<Integer,List<Integer>> row : rows.getValue().entrySet()) {
-            if (!checkSeatsInRow(row.getValue())) {
+    private boolean checkSector(List<RequestedSeat> requestedSeats)
+    {
+        Map<Integer,List<RequestedSeat>> rows = new HashMap();
+
+        for (RequestedSeat requestedSeat : requestedSeats) {
+            if (!rows.containsKey(requestedSeat.getRow())) {
+                List<RequestedSeat> seats = new ArrayList();
+                seats.add(requestedSeat);
+                rows.put(requestedSeat.getRow(), seats);
+            } else {
+                rows.get(requestedSeat.getRow()).add(requestedSeat);
+            }
+        }
+
+        for (Map.Entry<Integer, List<RequestedSeat>> requestedSeatsInRow : rows.entrySet()) {
+            if (!checkRow(requestedSeatsInRow.getValue())) {
                 return false;
             }
         }
@@ -67,20 +66,22 @@ public class SpaceBetweenRequestedSeats implements Rule {
         return true;
     }
 
-    private boolean checkSeatsInRow(List<Integer> seatsInRow) {
-        Integer previousSeatInRow = 0;
-        for (Integer seat : seatsInRow) {
-            if (previousSeatInRow > 0 && !checkIsSpaceBetweenSeats(seat, previousSeatInRow)) {
+    private boolean checkRow(List<RequestedSeat> requestedSeats)
+    {
+        int previousSeatInRow = 0;
+
+        for (RequestedSeat requestedSeat : requestedSeats) {
+            if (previousSeatInRow > 0 && !checkIsSpaceBetweenSeats(requestedSeat.getSeatInRow(), previousSeatInRow)) {
                 return false;
             }
 
-            previousSeatInRow = seat;
+            previousSeatInRow = requestedSeat.getSeatInRow();
         }
 
         return true;
     }
 
-    private boolean checkIsSpaceBetweenSeats(Integer seatInRow, Integer previousSeatInRow) {
+    private boolean checkIsSpaceBetweenSeats(int seatInRow, int previousSeatInRow) {
         return ((seatInRow - previousSeatInRow == 1)
                 || (seatInRow - previousSeatInRow > this.spaceBetweenSeats));
     }
