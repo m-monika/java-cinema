@@ -6,6 +6,7 @@ import cinema.movie.api.RequestedSeat;
 
 import static org.junit.Assert.*;
 
+import cinema.movie.model.Seat;
 import org.junit.*;
 
 import cinema.movie.database.Screening;
@@ -39,7 +40,9 @@ public class ReservationServiceTest {
             if (returnEmptyReservation) {
                 return Optional.empty();
             } else {
-                return Optional.of(new Reservation(idScreening));
+                Seat seat = new Seat(1, 1, 1, true, 0);
+                List<Seat> seats = List.of(seat);
+                return Optional.of(new Reservation(idScreening, seats));
             }
         }
     }
