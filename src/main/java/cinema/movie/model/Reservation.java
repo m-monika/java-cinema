@@ -24,8 +24,17 @@ public class Reservation {
     }
 
     private boolean reserveSeat(RequestedSeat requestedSeat) {
-        // @TODO check if seat is available
+        Seat foundSeat = seats.stream()
+                .filter(seat -> seat.getSeatInRow() == requestedSeat.getSeatInRow())
+                .filter(seat -> seat.getRow() == requestedSeat.getRow())
+                .filter(seat -> seat.getSector() == requestedSeat.getSector())
+                .findAny()
+                .orElse(null);
 
-        return true;
+        if (foundSeat == null) {
+            return false;
+        }
+
+        return foundSeat.reserveSeat();
     }
 }
