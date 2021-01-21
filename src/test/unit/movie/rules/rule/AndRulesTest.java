@@ -35,23 +35,32 @@ public class AndRulesTest {
 
     @Test
     public void canMakeReservationWhenTrueAndFalseReturned() {
+        //given
         RuleInterfaceMockTrue ruleTrue = new RuleInterfaceMockTrue();
         RuleInterfaceMockFalse ruleFalse = new RuleInterfaceMockFalse();
         AndRules andRules = new AndRules(ruleTrue, ruleFalse);
+
+        //expect
         assertFalse(andRules.canMakeReservation(requestedSeats));
     }
 
     @Test
     public void canMakeReservationWhenTrueReturned() {
+        //given
         RuleInterfaceMockTrue ruleTrue = new RuleInterfaceMockTrue();
         AndRules andRules = new AndRules(ruleTrue);
+
+        //expect
         assertTrue(andRules.canMakeReservation(requestedSeats));
     }
 
     @Test
     public void canMakeReservationWhenFalseReturned() {
+        //given
         RuleInterfaceMockFalse ruleFalse = new RuleInterfaceMockFalse();
         AndRules andRules = new AndRules(ruleFalse);
+
+        //expect
         assertFalse(andRules.canMakeReservation(requestedSeats));
     }
 }

@@ -76,60 +76,94 @@ public class ReservationServiceTest {
 
     @Test
     public void tryToMakeReservationButNoSeatsSent() {
+        // given
         ReservationService reservationService = new ReservationService(
                 new RulesMock(),
                 new ScreeningMock(true, false)
         );
+        // and
         List<RequestedSeat> emptyList = new ArrayList<>();
+
+        // when
         Result result = reservationService.make(1, emptyList);
+
+        // then
         assertFalse(result.isSuccess());
     }
 
     @Test
     public void tryToMakeReservationButScreenDoNotExist() {
+        // given
         ReservationService reservationService = new ReservationService(
                 new RulesMock(),
                 new ScreeningMock(true, false)
         );
+        // and
         RequestedSeat seat = new RequestedSeat(1, 1, 1);
+        // and
         List<RequestedSeat> requestedSeats = List.of(seat);
+
+        // when
         Result result = reservationService.make(1, requestedSeats);
+
+        // then
         assertFalse(result.isSuccess());
     }
 
     @Test
     public void canNotSaveReservation() {
+        // given
         ReservationService reservationService = new ReservationService(
                 new RulesMock(),
                 new ScreeningMock(false, false)
         );
+        // and
         RequestedSeat seat = new RequestedSeat(1, 1, 1);
+        // and
         List<RequestedSeat> requestedSeats = List.of(seat);
+
+        // when
         Result result = reservationService.make(1, requestedSeats);
+
+        // then
         assertFalse(result.isSuccess());
     }
 
     @Test
     public void canNotMakeReservationBacauseOfRules() {
+        // given
         ReservationService reservationService = new ReservationService(
                 new RulesMock(false),
                 new ScreeningMock(false, true)
         );
+        // and
         RequestedSeat seat = new RequestedSeat(1, 1, 1);
+        // and
         List<RequestedSeat> requestedSeats = List.of(seat);
+
+        // when
         Result result = reservationService.make(1, requestedSeats);
+
+        // then
         assertFalse(result.isSuccess());
     }
 
     @Test
     public void makingReservationSuccess() {
+        // given
         ReservationService reservationService = new ReservationService(
                 new RulesMock(),
                 new ScreeningMock(false, true)
         );
+        // and
         RequestedSeat seat = new RequestedSeat(1, 1, 1);
+        // and
         List<RequestedSeat> requestedSeats = List.of(seat);
+
+        // when
         Result result = reservationService.make(1, requestedSeats);
+
+        // than
         assertTrue(result.isSuccess());
     }
 }
