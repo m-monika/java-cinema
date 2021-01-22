@@ -22,11 +22,11 @@ public class SpaceBetweenRequestedSeats implements Rule {
 
     private boolean checkAll(List<RequestedSeat> requestedSeats)
     {
-        Map<Integer,List<RequestedSeat>> sectors = new HashMap();
+        Map<Integer,List<RequestedSeat>> sectors = new HashMap<>();
 
         for (RequestedSeat requestedSeat : requestedSeats) {
             if (!sectors.containsKey(requestedSeat.getSector())) {
-                List<RequestedSeat> seats = new ArrayList();
+                List<RequestedSeat> seats = new ArrayList<>();
                 seats.add(requestedSeat);
                 sectors.put(requestedSeat.getSector(),seats);
             } else {
@@ -45,11 +45,11 @@ public class SpaceBetweenRequestedSeats implements Rule {
 
     private boolean checkSector(List<RequestedSeat> requestedSeats)
     {
-        Map<Integer,List<RequestedSeat>> rows = new HashMap();
+        Map<Integer,List<RequestedSeat>> rows = new HashMap<>();
 
         for (RequestedSeat requestedSeat : requestedSeats) {
             if (!rows.containsKey(requestedSeat.getRow())) {
-                List<RequestedSeat> seats = new ArrayList();
+                List<RequestedSeat> seats = new ArrayList<>();
                 seats.add(requestedSeat);
                 rows.put(requestedSeat.getRow(), seats);
             } else {
