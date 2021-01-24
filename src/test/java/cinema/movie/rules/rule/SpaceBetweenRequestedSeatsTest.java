@@ -1,7 +1,6 @@
-package cinema.test.movie.rules.rule;
+package cinema.movie.rules.rule;
 
 import cinema.movie.api.RequestedSeat;
-import cinema.movie.rules.rule.SpaceBetweenRequestedSeats;
 
 import java.util.List;
 
@@ -10,6 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
 public class SpaceBetweenRequestedSeatsTest {
     @Test
     void canNotMakeReservationOnlyOneSeatBetweenButTwoExpected() {

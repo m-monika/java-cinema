@@ -1,13 +1,8 @@
-package cinema.test.movie;
+package cinema.movie;
 
-import cinema.movie.ReservationService;
-import cinema.movie.Result;
 import cinema.movie.api.RequestedSeat;
 
-import static org.junit.Assert.*;
-
 import cinema.movie.model.Seat;
-import org.junit.*;
 
 import cinema.movie.database.Screening;
 import cinema.movie.model.Reservation;
@@ -19,6 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
 public class ReservationServiceTest {
     /* TODO change to mock */
     static class ScreeningMock implements Screening {

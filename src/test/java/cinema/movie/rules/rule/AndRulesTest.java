@@ -1,15 +1,18 @@
-package cinema.test.movie.rules.rule;
+package cinema.movie.rules.rule;
 
 import cinema.movie.api.RequestedSeat;
 import cinema.movie.rules.Rule;
-import cinema.movie.rules.rule.AndRules;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.*;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class AndRulesTest {
     public static List<RequestedSeat> requestedSeats;
 
@@ -26,8 +29,8 @@ public class AndRulesTest {
         }
     }
 
-    @BeforeClass
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         RequestedSeat seat = new RequestedSeat(1, 1, 1);
         RequestedSeat secondSeat = new RequestedSeat(1, 1, 2);
         requestedSeats = List.of(seat, secondSeat);

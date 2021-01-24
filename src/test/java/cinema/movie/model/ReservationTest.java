@@ -1,9 +1,7 @@
-package cinema.test.movie.model;
+package cinema.movie.model;
 
 import cinema.movie.api.RequestedSeat;
-import cinema.movie.model.Seat;
 import cinema.movie.rules.Rule;
-import cinema.movie.model.Reservation;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,6 +10,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
 public class ReservationTest {
     static class RuleInterfaceMockTrue implements Rule {
         @Override
