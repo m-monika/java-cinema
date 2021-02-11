@@ -10,9 +10,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
 public class ReservationTest {
     static class RuleInterfaceMockTrue implements Rule {
         @Override

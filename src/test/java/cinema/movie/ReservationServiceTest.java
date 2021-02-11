@@ -19,9 +19,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
 public class ReservationServiceTest {
     /* TODO change to mock */
     static class ScreeningMock implements Screening {
