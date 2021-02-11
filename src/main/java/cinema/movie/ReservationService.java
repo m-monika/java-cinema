@@ -9,7 +9,6 @@ import cinema.movie.rules.Database;
 import cinema.movie.rules.Rule;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ReservationService {
     private final Database ruleDatabase;
@@ -25,15 +24,23 @@ public class ReservationService {
             return new Failure("You need to choose seats to make a reservation.");
         }
 
-        Optional<Reservation> optionalReservation = screeningDatabase.getReservation(idScreening);
+        return screeningDatabase.getReservation(idScreening)
+                .map(reservation -> tryMakeReservation(idScreening, reservation, requestedSeats))
+                .orElse(new Failure("Screening you are looking for does not exist."));
+    }
 
-        if (optionalReservation.isEmpty()) {
-            return new Failure("Screening you are looking for does not exist.");
-        }
+    private boolean validateRequestedSeats(List<RequestedSeat> requestedSeats) {
+        return requestedSeats.size() > 0;
+    }
 
-        Reservation reservation = optionalReservation.get();
+    private Result tryMakeReservation(
+            int idScreening,
+            Reservation reservation,
+            List<RequestedSeat> requestedSeats
+    ) {
+        Rule rule = this.ruleDatabase.getForMovie(idScreening);
 
-        if (!tryMakeReservation(idScreening, reservation, requestedSeats)) {
+        if (!reservation.make(rule, requestedSeats)) {
             return new Failure("You can not reserve those seats.");
         }
 
@@ -42,19 +49,5 @@ public class ReservationService {
         }
 
         return new Failure("Something went wrong, try again later.");
-    }
-
-    private boolean validateRequestedSeats(List<RequestedSeat> requestedSeats) {
-        return requestedSeats.size() > 0;
-    }
-
-    private boolean tryMakeReservation(
-            int idScreening,
-            Reservation reservation,
-            List<RequestedSeat> requestedSeats
-    ) {
-        Rule rule = this.ruleDatabase.getForMovie(idScreening);
-
-        return reservation.make(rule, requestedSeats);
     }
 }
