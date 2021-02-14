@@ -15,12 +15,11 @@ public class Reservation {
     }
 
     public boolean make(Rule rule, List<RequestedSeat> requestedSeats) {
-        for (RequestedSeat requestedSeat : requestedSeats) {
-            if (!reserveSeat(requestedSeat)) {
-                return false;
-            }
-        }
-        return rule.canMakeReservation(requestedSeats);
+        boolean result = requestedSeats
+                .stream()
+                .allMatch(this::reserveSeat);
+
+        return result && rule.canMakeReservation(requestedSeats);
     }
 
     private boolean reserveSeat(RequestedSeat requestedSeat) {
