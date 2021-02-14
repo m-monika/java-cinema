@@ -6,20 +6,16 @@ import cinema.movie.rules.Rule;
 import java.util.List;
 
 public class AndRules implements Rule {
-    private final Rule[] rules;
+    private final List<Rule> rules;
 
     public AndRules(Rule... rules) {
-        this.rules = rules;
+        this.rules = List.of(rules);
     }
 
     @Override
     public boolean canMakeReservation(List<RequestedSeat> requestedSeats) {
-        for (Rule rule : rules) {
-            if (!rule.canMakeReservation(requestedSeats)) {
-                return false;
-            }
-        }
-
-        return true;
+        return rules
+                .stream()
+                .allMatch(rule -> rule.canMakeReservation(requestedSeats));
     }
 }
