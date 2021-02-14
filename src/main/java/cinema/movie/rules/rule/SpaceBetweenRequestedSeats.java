@@ -63,7 +63,7 @@ public class SpaceBetweenRequestedSeats implements Rule {
         int previousSeatInRow = 0;
 
         for (RequestedSeat requestedSeat : requestedSeats) {
-            if (previousSeatInRow > 0 && !checkIsSpaceBetweenSeats(requestedSeat.getSeatInRow(), previousSeatInRow)) {
+            if (!checkIsSpaceBetweenSeats(requestedSeat.getSeatInRow(), previousSeatInRow)) {
                 return false;
             }
 
@@ -74,7 +74,8 @@ public class SpaceBetweenRequestedSeats implements Rule {
     }
 
     private boolean checkIsSpaceBetweenSeats(int seatInRow, int previousSeatInRow) {
-        return ((seatInRow - previousSeatInRow == 1)
+        return (previousSeatInRow < 1
+                || (seatInRow - previousSeatInRow == 1)
                 || (seatInRow - previousSeatInRow > this.spaceBetweenSeats));
     }
 }
