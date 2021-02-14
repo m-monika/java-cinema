@@ -34,13 +34,9 @@ public class SpaceBetweenRequestedSeats implements Rule {
             }
         }
 
-        for (Map.Entry<Integer, List<RequestedSeat>> requestedSeatsInSector : sectors.entrySet()) {
-            if (!checkSector(requestedSeatsInSector.getValue())) {
-                return false;
-            }
-        }
-
-        return true;
+        return sectors.entrySet()
+                .stream()
+                .allMatch(requestedSeatsInSector -> checkSector(requestedSeatsInSector.getValue()));
     }
 
     private boolean checkSector(List<RequestedSeat> requestedSeats)
@@ -57,13 +53,9 @@ public class SpaceBetweenRequestedSeats implements Rule {
             }
         }
 
-        for (Map.Entry<Integer, List<RequestedSeat>> requestedSeatsInRow : rows.entrySet()) {
-            if (!checkRow(requestedSeatsInRow.getValue())) {
-                return false;
-            }
-        }
-
-        return true;
+        return rows.entrySet()
+                .stream()
+                .allMatch(requestedSeatsInRow -> checkRow(requestedSeatsInRow.getValue()));
     }
 
     private boolean checkRow(List<RequestedSeat> requestedSeats)
