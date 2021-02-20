@@ -1,15 +1,16 @@
 package cinema.movie.rules.rule;
 
-import cinema.movie.api.RequestedSeat;
+import cinema.movie.reservation.RequestedSeat;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import cinema.movie.rules.SpaceBetweenRequestedSeatsRule;
 import org.junit.jupiter.api.Test;
 
-public class SpaceBetweenRequestedSeatsTest {
+public class SpaceBetweenRequestedSeatsRuleTest {
     @Test
     void canNotMakeReservationOnlyOneSeatBetweenButTwoExpected() {
         //given
@@ -20,7 +21,7 @@ public class SpaceBetweenRequestedSeatsTest {
         List<RequestedSeat> requestedSeats = List.of(seat, secondSeat);
 
         //when
-        SpaceBetweenRequestedSeats reservation = new SpaceBetweenRequestedSeats(2);
+        SpaceBetweenRequestedSeatsRule reservation = new SpaceBetweenRequestedSeatsRule(2);
 
         //then
         assertFalse(reservation.canMakeReservation(requestedSeats));
@@ -36,7 +37,7 @@ public class SpaceBetweenRequestedSeatsTest {
         List<RequestedSeat> requestedSeats = List.of(seat, secondSeat);
 
         //when
-        SpaceBetweenRequestedSeats reservation = new SpaceBetweenRequestedSeats(2);
+        SpaceBetweenRequestedSeatsRule reservation = new SpaceBetweenRequestedSeatsRule(2);
 
         //then
         assertTrue(reservation.canMakeReservation(requestedSeats));
@@ -67,7 +68,7 @@ public class SpaceBetweenRequestedSeatsTest {
         );
 
         //when
-        SpaceBetweenRequestedSeats reservation = new SpaceBetweenRequestedSeats(2);
+        SpaceBetweenRequestedSeatsRule reservation = new SpaceBetweenRequestedSeatsRule(2);
 
         //then
         assertTrue(reservation.canMakeReservation(requestedSeats));
@@ -92,7 +93,7 @@ public class SpaceBetweenRequestedSeatsTest {
         );
 
         //when
-        SpaceBetweenRequestedSeats reservation = new SpaceBetweenRequestedSeats(2);
+        SpaceBetweenRequestedSeatsRule reservation = new SpaceBetweenRequestedSeatsRule(2);
 
         //then
         assertFalse(reservation.canMakeReservation(requestedSeats));

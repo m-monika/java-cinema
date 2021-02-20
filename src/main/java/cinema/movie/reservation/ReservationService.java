@@ -1,10 +1,6 @@
-package cinema.movie;
+package cinema.movie.reservation;
 
-import cinema.movie.api.RequestedSeat;
 import cinema.movie.database.Screening;
-import cinema.movie.model.Reservation;
-import cinema.movie.result.Failure;
-import cinema.movie.result.Success;
 import cinema.movie.rules.Database;
 import cinema.movie.rules.Rule;
 
@@ -21,12 +17,12 @@ public class ReservationService {
 
     public Result make(int idScreening, List<RequestedSeat> requestedSeats) {
         if (!validateRequestedSeats(requestedSeats)) {
-            return new Failure("You need to choose seats to make a reservation.");
+            return new FailureResult("You need to choose seats to make a reservation.");
         }
 
         return screeningDatabase.getReservation(idScreening)
                 .map(reservation -> tryMakeReservation(idScreening, reservation, requestedSeats))
-                .orElse(new Failure("Screening you are looking for does not exist."));
+                .orElse(new FailureResult("Screening you are looking for does not exist."));
     }
 
     private boolean validateRequestedSeats(List<RequestedSeat> requestedSeats) {
@@ -35,19 +31,19 @@ public class ReservationService {
 
     private Result tryMakeReservation(
             int idScreening,
-            Reservation reservation,
+            ReservationModel reservationModel,
             List<RequestedSeat> requestedSeats
     ) {
         Rule rule = this.ruleDatabase.getForMovie(idScreening);
 
-        if (!reservation.make(rule, requestedSeats)) {
-            return new Failure("You can not reserve those seats.");
+        if (!reservationModel.make(rule, requestedSeats)) {
+            return new FailureResult("You can not reserve those seats.");
         }
 
-        if (screeningDatabase.saveReservation(reservation)) {
-            return new Success();
+        if (screeningDatabase.saveReservation(reservationModel)) {
+            return new SuccessResult();
         }
 
-        return new Failure("Something went wrong, try again later.");
+        return new FailureResult("Something went wrong, try again later.");
     }
 }

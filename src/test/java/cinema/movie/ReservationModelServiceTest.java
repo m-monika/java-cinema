@@ -1,14 +1,16 @@
 package cinema.movie;
 
-import cinema.movie.api.RequestedSeat;
+import cinema.movie.reservation.RequestedSeat;
 
-import cinema.movie.model.Seat;
+import cinema.movie.reservation.SeatModel;
 
 import cinema.movie.database.Screening;
-import cinema.movie.model.Reservation;
+import cinema.movie.reservation.ReservationModel;
+import cinema.movie.reservation.ReservationService;
+import cinema.movie.reservation.Result;
 import cinema.movie.rules.Database;
 import cinema.movie.rules.Rule;
-import cinema.movie.rules.rule.NoRules;
+import cinema.movie.rules.NoRules;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ReservationServiceTest {
+public class ReservationModelServiceTest {
     /* TODO change to mock */
     static class ScreeningMock implements Screening {
         boolean returnEmptyReservation;
@@ -31,18 +33,18 @@ public class ReservationServiceTest {
         }
 
         @Override
-        public boolean saveReservation(Reservation reservation) {
+        public boolean saveReservation(ReservationModel reservationModel) {
             return this.canSaveReservation;
         }
 
         @Override
-        public Optional<Reservation> getReservation(int idScreening) {
+        public Optional<ReservationModel> getReservation(int idScreening) {
             if (returnEmptyReservation) {
                 return Optional.empty();
             } else {
-                Seat seat = new Seat(1, 1, 1, true, 0);
-                List<Seat> seats = List.of(seat);
-                return Optional.of(new Reservation(idScreening, seats));
+                SeatModel seatModel = new SeatModel(1, 1, 1, true, 0);
+                List<SeatModel> seatModels = List.of(seatModel);
+                return Optional.of(new ReservationModel(idScreening, seatModels));
             }
         }
     }

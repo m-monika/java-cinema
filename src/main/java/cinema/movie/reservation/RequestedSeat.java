@@ -1,4 +1,4 @@
-package cinema.movie.api;
+package cinema.movie.reservation;
 
 public class RequestedSeat {
     private final int sector;

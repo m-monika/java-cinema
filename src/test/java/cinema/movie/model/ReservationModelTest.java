@@ -1,6 +1,8 @@
 package cinema.movie.model;
 
-import cinema.movie.api.RequestedSeat;
+import cinema.movie.reservation.RequestedSeat;
+import cinema.movie.reservation.ReservationModel;
+import cinema.movie.reservation.SeatModel;
 import cinema.movie.rules.Rule;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class ReservationTest {
+public class ReservationModelTest {
     static class RuleInterfaceMockTrue implements Rule {
         @Override
         public boolean canMakeReservation(List<RequestedSeat> requestedSeats) {
@@ -28,62 +30,62 @@ public class ReservationTest {
     @Test
     public void canNotMakeReservationBecauseSeatDoesNotExists() {
         //given
-        List<Seat> seats = new ArrayList<>();
+        List<SeatModel> seatModels = new ArrayList<>();
         //and
         RequestedSeat requestedSeat = new RequestedSeat(1, 2, 57);
         //and
         List<RequestedSeat> requestedSeats = List.of(requestedSeat);
         //and
-        Reservation reservation = new Reservation(1, seats);
+        ReservationModel reservationModel = new ReservationModel(1, seatModels);
 
         //expect
-        assertFalse(reservation.make(new RuleInterfaceMockTrue(), requestedSeats));
+        assertFalse(reservationModel.make(new RuleInterfaceMockTrue(), requestedSeats));
     }
 
     @Test
     public void tryToReserveSeatButItIsAnavailable() {
         //given
-        Seat seat = new Seat(1, 1, 1, false, 0);
+        SeatModel seatModel = new SeatModel(1, 1, 1, false, 0);
         //and
-        List<Seat> seats = List.of(seat);
+        List<SeatModel> seatModels = List.of(seatModel);
         //and
         RequestedSeat requestedSeat = new RequestedSeat(1, 1, 1);
         //and
         List<RequestedSeat> requestedSeats = List.of(requestedSeat);
         //and
-        Reservation reservation = new Reservation(1, seats);
+        ReservationModel reservationModel = new ReservationModel(1, seatModels);
 
         //expect
-        assertFalse(reservation.make(new RuleInterfaceMockTrue(), requestedSeats));
+        assertFalse(reservationModel.make(new RuleInterfaceMockTrue(), requestedSeats));
     }
 
     @Test
     public void tryToReserveAvailableSeatButRulesDontAllowIt() {
         //given
-        Seat seat = new Seat(1, 1, 1, true, 0);
+        SeatModel seatModel = new SeatModel(1, 1, 1, true, 0);
         //and
-        List<Seat> seats = List.of(seat);
+        List<SeatModel> seatModels = List.of(seatModel);
         //and
         RequestedSeat requestedSeat = new RequestedSeat(1, 1, 1);
         //and
         List<RequestedSeat> requestedSeats = List.of(requestedSeat);
         //and
-        Reservation reservation = new Reservation(1, seats);
+        ReservationModel reservationModel = new ReservationModel(1, seatModels);
 
         //expect
-        assertFalse(reservation.make(new RuleInterfaceMockFalse(), requestedSeats));
+        assertFalse(reservationModel.make(new RuleInterfaceMockFalse(), requestedSeats));
     }
 
     @Test
     public void reserveTwoSeats() {
         //given
-        Seat seat1 = new Seat(1, 1, 1, true, 0);
+        SeatModel seatModel1 = new SeatModel(1, 1, 1, true, 0);
         //and
-        Seat seat2 = new Seat(1, 1, 2, true, 0);
+        SeatModel seatModel2 = new SeatModel(1, 1, 2, true, 0);
         //and
-        Seat seat3 = new Seat(1, 1, 3, true, 0);
+        SeatModel seatModel3 = new SeatModel(1, 1, 3, true, 0);
         //and
-        List<Seat> seats = List.of(seat1, seat2, seat3);
+        List<SeatModel> seatModels = List.of(seatModel1, seatModel2, seatModel3);
         //and
         RequestedSeat requestedSeat1 = new RequestedSeat(1, 1, 1);
         //and
@@ -91,9 +93,9 @@ public class ReservationTest {
         //and
         List<RequestedSeat> requestedSeats = List.of(requestedSeat1, requestedSeat2);
         //and
-        Reservation reservation = new Reservation(1, seats);
+        ReservationModel reservationModel = new ReservationModel(1, seatModels);
 
         //expect
-        assertTrue(reservation.make(new RuleInterfaceMockTrue(), requestedSeats));
+        assertTrue(reservationModel.make(new RuleInterfaceMockTrue(), requestedSeats));
     }
 }

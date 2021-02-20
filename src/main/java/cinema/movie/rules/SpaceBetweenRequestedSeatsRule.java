@@ -1,17 +1,16 @@
-package cinema.movie.rules.rule;
+package cinema.movie.rules;
 
-import cinema.movie.api.RequestedSeat;
-import cinema.movie.rules.Rule;
+import cinema.movie.reservation.RequestedSeat;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
-public class SpaceBetweenRequestedSeats implements Rule {
+public class SpaceBetweenRequestedSeatsRule implements Rule {
     private final int spaceBetweenSeats;
 
-    public SpaceBetweenRequestedSeats(int spaceBetweenSeats) {
+    public SpaceBetweenRequestedSeatsRule(int spaceBetweenSeats) {
         this.spaceBetweenSeats = spaceBetweenSeats;
     }
 

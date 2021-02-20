@@ -1,6 +1,7 @@
 package cinema.movie.rules.rule;
 
-import cinema.movie.api.RequestedSeat;
+import cinema.movie.reservation.RequestedSeat;
+import cinema.movie.rules.AndRules;
 import cinema.movie.rules.Rule;
 
 import java.util.List;

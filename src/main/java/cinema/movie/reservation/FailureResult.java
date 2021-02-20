@@ -1,11 +1,11 @@
-package cinema.movie.result;
+package cinema.movie.reservation;
 
-import cinema.movie.Result;
+import cinema.movie.reservation.Result;
 
-public class Failure implements Result {
+public class FailureResult implements Result {
     private final String failureReason;
 
-    public Failure(String failureReason) {
+    public FailureResult(String failureReason) {
         this.failureReason = failureReason;
     }
 

@@ -1,13 +1,13 @@
-package cinema.movie.model;
+package cinema.movie.reservation;
 
-public class Seat {
+public class SeatModel {
     private final int sector;
     private final int row;
     private final int seatInRow;
     private final int version;
     private boolean isAvailable;
 
-    public Seat(
+    public SeatModel(
         int sector,
         int row,
         int seatInRow,

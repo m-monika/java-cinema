@@ -1,4 +1,4 @@
-package cinema.movie;
+package cinema.movie.reservation;
 
 public interface Result {
     public boolean isSuccess();
