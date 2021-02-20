@@ -1,8 +1,6 @@
 package cinema.movie.reservation;
 
-import cinema.movie.reservation.Result;
-
-public class SuccessResult implements Result {
+class SuccessResult implements Result {
     public boolean isSuccess() {
         return true;
     }

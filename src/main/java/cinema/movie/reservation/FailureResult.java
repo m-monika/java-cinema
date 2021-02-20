@@ -1,8 +1,6 @@
 package cinema.movie.reservation;
 
-import cinema.movie.reservation.Result;
-
-public class FailureResult implements Result {
+class FailureResult implements Result {
     private final String failureReason;
 
     public FailureResult(String failureReason) {
