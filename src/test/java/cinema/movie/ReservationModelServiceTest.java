@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,38 +50,12 @@ public class ReservationModelServiceTest {
         }
     }
 
-    static class RuleInterfaceMockFalse implements Rule {
-        @Override
-        public boolean canMakeReservation(List<RequestedSeat> requestedSeats) {
-            return false;
-        }
-    }
-
-    static class RulesMock implements Database {
-        boolean canMakeReservation;
-
-        public RulesMock() {
-            canMakeReservation = true;
-        }
-        public RulesMock(boolean canMakeReservation) {
-            this.canMakeReservation = canMakeReservation;
-        }
-
-        @Override
-        public Rule getForMovie(int idMovie) {
-            if (canMakeReservation) {
-                return new NoRules();
-            }
-
-            return new RuleInterfaceMockFalse();
-        }
-    }
-
     @Test
     public void tryToMakeReservationButNoSeatsSent() {
         // given
+        Database rulesRepositoryMock = Mockito.mock(Database.class);
         ReservationService reservationService = new ReservationService(
-                new RulesMock(),
+                rulesRepositoryMock,
                 new ScreeningMock(true, false)
         );
         // and
@@ -96,8 +71,9 @@ public class ReservationModelServiceTest {
     @Test
     public void tryToMakeReservationButScreenDoNotExist() {
         // given
+        Database rulesRepositoryMock = Mockito.mock(Database.class);
         ReservationService reservationService = new ReservationService(
-                new RulesMock(),
+                rulesRepositoryMock,
                 new ScreeningMock(true, false)
         );
         // and
@@ -115,14 +91,17 @@ public class ReservationModelServiceTest {
     @Test
     public void canNotSaveReservation() {
         // given
+        Database rulesRepositoryMock = Mockito.mock(Database.class);
         ReservationService reservationService = new ReservationService(
-                new RulesMock(),
+                rulesRepositoryMock,
                 new ScreeningMock(false, false)
         );
         // and
         RequestedSeat seat = new RequestedSeat(1, 1, 1);
         // and
         List<RequestedSeat> requestedSeats = List.of(seat);
+        // and
+        Mockito.when(rulesRepositoryMock.getForMovie(1)).thenReturn(new NoRules());
 
         // when
         Result result = reservationService.make(1, requestedSeats);
@@ -134,14 +113,20 @@ public class ReservationModelServiceTest {
     @Test
     public void canNotMakeReservationBacauseOfRules() {
         // given
+        Database rulesRepositoryMock = Mockito.mock(Database.class);
         ReservationService reservationService = new ReservationService(
-                new RulesMock(false),
+                rulesRepositoryMock,
                 new ScreeningMock(false, true)
         );
         // and
         RequestedSeat seat = new RequestedSeat(1, 1, 1);
         // and
         List<RequestedSeat> requestedSeats = List.of(seat);
+        // and
+        Rule rulesMock = Mockito.mock(Rule.class);
+        Mockito.when(rulesRepositoryMock.getForMovie(1)).thenReturn(rulesMock);
+        // and
+        Mockito.when(rulesMock.canMakeReservation(requestedSeats)).thenReturn(false);
 
         // when
         Result result = reservationService.make(1, requestedSeats);
@@ -153,14 +138,20 @@ public class ReservationModelServiceTest {
     @Test
     public void makingReservationSuccess() {
         // given
+        Database rulesRepositoryMock = Mockito.mock(Database.class);
         ReservationService reservationService = new ReservationService(
-                new RulesMock(),
+                rulesRepositoryMock,
                 new ScreeningMock(false, true)
         );
         // and
         RequestedSeat seat = new RequestedSeat(1, 1, 1);
         // and
         List<RequestedSeat> requestedSeats = List.of(seat);
+        // and
+        Rule rulesMock = Mockito.mock(Rule.class);
+        Mockito.when(rulesRepositoryMock.getForMovie(1)).thenReturn(rulesMock);
+        // and
+        Mockito.when(rulesMock.canMakeReservation(requestedSeats)).thenReturn(true);
 
         // when
         Result result = reservationService.make(1, requestedSeats);
